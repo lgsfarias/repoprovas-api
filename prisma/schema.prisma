@@ -18,3 +18,66 @@ model User {
 
   @@map("users")
 }
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  tests     Test[]
+
+  @@map("categories")
+}
+
+model Term {
+  id          Int          @id @default(autoincrement())
+  number      Int          @unique
+  createdAt   DateTime     @default(now()) @db.Timestamptz()
+  disciplines Discipline[]
+
+  @@map("terms")
+}
+
+model Teacher {
+  id          Int                 @id @default(autoincrement())
+  name        String              @unique
+  createdAt   DateTime            @default(now()) @db.Timestamptz()
+  disciplines teacherDiscipline[]
+
+  @@map("teachers")
+}
+
+model Discipline {
+  id        Int                 @id @default(autoincrement())
+  name      String              @unique
+  term      Term                @relation(fields: [termId], references: [id])
+  termId    Int                 @map("term_id")
+  createdAt DateTime            @default(now()) @db.Timestamptz()
+  teachers  teacherDiscipline[]
+
+  @@map("disciplines")
+}
+
+model teacherDiscipline {
+  id           Int        @id @default(autoincrement())
+  teacher      Teacher    @relation(fields: [teacherId], references: [id])
+  teacherId    Int        @map("teacher_id")
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  disciplineId Int        @map("discipline_id")
+  createdAt    DateTime   @default(now()) @db.Timestamptz()
+  tests        Test[]
+
+  @@map("teachers_disciplines")
+}
+
+model Test {
+  id                  Int               @id @default(autoincrement())
+  name                String            @unique
+  pdfUrl              String
+  category            Category          @relation(fields: [categoryId], references: [id])
+  categoryId          Int               @map("category_id")
+  teacherDiscipline   teacherDiscipline @relation(fields: [teacherDisciplineId], references: [id])
+  teacherDisciplineId Int               @map("teacher_discipline_id")
+  createdAt           DateTime          @default(now()) @db.Timestamptz()
+
+  @@map("tests")
+}
