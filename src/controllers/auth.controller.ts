@@ -7,7 +7,7 @@ export const signup = async (req: Request, res: Response) => {
   await userService.verifyIfUserExists(email);
   const hashedPassword = encryptPassword(password);
   const user = await userService.create({ email, password: hashedPassword });
-  res.send(user);
+  res.status(201).json(user);
 };
 
 export const signin = async (req: Request, res: Response) => {
