@@ -9,3 +9,14 @@ export const create = async (createTestData: CreateTestData) => {
   });
   return test;
 };
+
+export const getTestByAllAttributes = async (
+  createTestData: CreateTestData,
+) => {
+  const test = await prisma.test.findFirst({
+    where: {
+      ...createTestData,
+    },
+  });
+  return test;
+};
