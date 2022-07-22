@@ -9,13 +9,18 @@ const PASSWORD = faker.internet.password();
 const TEST_NAME = faker.word.noun();
 const PDF_URL = faker.image.imageUrl();
 const CATEGORY_ID = faker.datatype.number({ min: 7, max: 9 });
-const TEACHER_DISCIPLINE_ID = faker.datatype.number({ min: 2, max: 7 });
+const TEACHER_ID = faker.datatype.number({ min: 1, max: 2 });
+const DISCIPLINE_ID = faker.datatype.number({ min: 1, max: 6 });
+const TEACHER_DISCIPLINE_ID = faker.datatype.number({ min: 1, max: 2 });
 let TOKEN: string;
 
 beforeAll(async () => {
+  await prisma.$executeRaw`DELETE FROM users 
+    WHERE email = '${EMAIL}'`;
   await supertest(app).post('/signup').send({
     email: EMAIL,
     password: PASSWORD,
+    confirmPassword: PASSWORD,
   });
   const response = await supertest(app).post('/signin').send({
     email: EMAIL,
@@ -25,15 +30,15 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await prisma.$executeRaw`DELETE FROM tests 
-  WHERE name = '${TEST_NAME}' 
-  AND "pdf_url" = '${PDF_URL}' 
-  AND "category_id" = ${CATEGORY_ID} 
+  await prisma.$executeRaw`DELETE FROM tests
+  WHERE name = '${TEST_NAME}'
+  AND "pdf_url" = '${PDF_URL}'
+  AND "category_id" = ${CATEGORY_ID}
   AND "teacher_discipline_id" = ${TEACHER_DISCIPLINE_ID}`;
 });
 
 describe('POST /tests', () => {
-  it('should return a 201 status code', async () => {
+  it('should return a 201 status code when create test successfully', async () => {
     const response = await supertest(app)
       .post('/tests')
       .send({
