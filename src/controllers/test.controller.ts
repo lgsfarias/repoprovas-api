@@ -34,3 +34,8 @@ export const getTestsByTerm = async (req: Request, res: Response) => {
   const tests = await testService.getTestsByTerm();
   res.status(200).json(tests);
 };
+
+export const getTestsByTeacher = async (req: Request, res: Response) => {
+  const tests = await testService.getTestsByTeacher();
+  res.status(200).json(tests);
+};
