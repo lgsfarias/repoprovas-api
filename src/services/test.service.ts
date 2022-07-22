@@ -13,3 +13,13 @@ export const verifyIfTestExist = async (createTestData: CreateTestData) => {
     throw new AppError('Test already exists', 400);
   }
 };
+
+export const getTestsByTerm = async () => {
+  const tests = await testRepository.getTestsByTerm();
+  return tests;
+};
+
+export const getTestsByTeacher = async () => {
+  const tests = await testRepository.getTestsByTeachers();
+  return tests;
+};
