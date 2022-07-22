@@ -29,3 +29,8 @@ export const createTest = async (req: Request, res: Response) => {
   });
   res.status(201).json(test);
 };
+
+export const getTestsByTerm = async (req: Request, res: Response) => {
+  const tests = await testService.getTestsByTerm();
+  res.status(200).json(tests);
+};
