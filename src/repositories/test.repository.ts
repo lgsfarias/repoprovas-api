@@ -20,3 +20,47 @@ export const getTestByAllAttributes = async (
   });
   return test;
 };
+
+export const getTestsByTerm = async () => {
+  const tests = await prisma.term.findMany({
+    include: {
+      disciplines: {
+        include: {
+          teachers: {
+            include: {
+              teacher: true,
+              tests: {
+                include: {
+                  category: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return tests;
+};
+
+export const getTestsByTeachers = async () => {
+  const tests = await prisma.teacher.findMany({
+    include: {
+      disciplines: {
+        include: {
+          discipline: {
+            include: {
+              term: true,
+            },
+          },
+          tests: {
+            include: {
+              category: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return tests;
+};
