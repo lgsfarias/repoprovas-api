@@ -13,4 +13,6 @@ export const validateIfTeacherDisciplineExist = async (
   if (!teacherDiscipline) {
     throw new AppError('No teacher teaching this discipline', 400);
   }
+
+  return teacherDiscipline;
 };
