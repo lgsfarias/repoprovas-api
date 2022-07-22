@@ -14,33 +14,33 @@ async function main() {
     },
   });
 
-  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (1);
-  INSERT INTO terms ("number") VALUES (2);
-  INSERT INTO terms ("number") VALUES (3);
-  INSERT INTO terms ("number") VALUES (4);
-  INSERT INTO terms ("number") VALUES (5);
-  INSERT INTO terms ("number") VALUES (6);
-  
-  INSERT INTO categories ("name") VALUES ('Projeto');
-  INSERT INTO categories ("name") VALUES ('Prática');
-  INSERT INTO categories ("name") VALUES ('Recuperação');
-  
-  INSERT INTO teachers ("name") VALUES ('Diego Pinho');
-  INSERT INTO teachers ("name") VALUES ('Bruna Hamori');
-  
-  INSERT INTO disciplines ("name", "termId") VALUES ('HTML e CSS', 1);
-  INSERT INTO disciplines ("name", "termId") VALUES ('JavaScript', 2);
-  INSERT INTO disciplines ("name", "termId") VALUES ('React', 3);
-  INSERT INTO disciplines ("name", "termId") VALUES ('Humildade', 1);
-  INSERT INTO disciplines ("name", "termId") VALUES ('Planejamento', 2);
-  INSERT INTO disciplines ("name", "termId") VALUES ('Autoconfiança', 3);
-  
-  INSERT INTO "teachersDisciplines" ("teacherId", "disciplineId") VALUES (1, 1);
-  INSERT INTO "teachersDisciplines" ("teacherId", "disciplineId") VALUES (1, 2);
-  INSERT INTO "teachersDisciplines" ("teacherId", "disciplineId") VALUES (1, 3); 
-  INSERT INTO "teachersDisciplines" ("teacherId", "disciplineId") VALUES (2, 4);
-  INSERT INTO "teachersDisciplines" ("teacherId", "disciplineId") VALUES (2, 5);
-  INSERT INTO "teachersDisciplines" ("teacherId", "disciplineId") VALUES (2, 6);`;
+  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (1)`;
+  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (2)`;
+  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (3)`;
+  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (4)`;
+  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (5)`;
+  await prisma.$queryRaw`INSERT INTO terms ("number") VALUES (6)`;
+
+  await prisma.$queryRaw`INSERT INTO categories ("name") VALUES ('Projeto')`;
+  await prisma.$queryRaw`INSERT INTO categories ("name") VALUES ('Prática')`;
+  await prisma.$queryRaw`INSERT INTO categories ("name") VALUES ('Recuperação')`;
+
+  await prisma.$queryRaw`INSERT INTO teachers ("name") VALUES ('Diego Pinho')`;
+  await prisma.$queryRaw`INSERT INTO teachers ("name") VALUES ('Bruna Hamori')`;
+
+  await prisma.$queryRaw`INSERT INTO disciplines ("name", "term_id") VALUES ('HTML e CSS', 1)`;
+  await prisma.$queryRaw`INSERT INTO disciplines ("name", "term_id") VALUES ('JavaScript', 2)`;
+  await prisma.$queryRaw`INSERT INTO disciplines ("name", "term_id") VALUES ('React', 3)`;
+  await prisma.$queryRaw`INSERT INTO disciplines ("name", "term_id") VALUES ('Humildade', 1)`;
+  await prisma.$queryRaw`INSERT INTO disciplines ("name", "term_id") VALUES ('Planejamento', 2)`;
+  await prisma.$queryRaw`INSERT INTO disciplines ("name", "term_id") VALUES ('Autoconfiança', 3)`;
+
+  await prisma.$queryRaw`INSERT INTO "teachers_disciplines" ("teacher_id", "discipline_id") VALUES (1, 1)`;
+  await prisma.$queryRaw`INSERT INTO "teachers_disciplines" ("teacher_id", "discipline_id") VALUES (1, 2)`;
+  await prisma.$queryRaw`INSERT INTO "teachers_disciplines" ("teacher_id", "discipline_id") VALUES (1, 3)`;
+  await prisma.$queryRaw`INSERT INTO "teachers_disciplines" ("teacher_id", "discipline_id") VALUES (2, 4)`;
+  await prisma.$queryRaw`INSERT INTO "teachers_disciplines" ("teacher_id", "discipline_id") VALUES (2, 5)`;
+  await prisma.$queryRaw`INSERT INTO "teachers_disciplines" ("teacher_id", "discipline_id") VALUES (2, 6)`;
 }
 
 main()
