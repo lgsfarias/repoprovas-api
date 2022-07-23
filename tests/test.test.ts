@@ -35,19 +35,15 @@ beforeAll(async () => {
   if (teacherDiscipline) {
     TEACHER_DISCIPLINE_ID = teacherDiscipline.id;
   } else {
-    TEACHER_DISCIPLINE_ID = await prisma.$executeRaw`
-    INSERT INTO teachers_disciplines (teacher_id, discipline_id)
+    TEACHER_DISCIPLINE_ID =
+      await prisma.$executeRaw`INSERT INTO teachers_disciplines (teacher_id, discipline_id)
     VALUES (${TEACHER_ID}, ${DISCIPLINE_ID})
     RETURNING id`;
   }
 });
 
 beforeEach(async () => {
-  await prisma.$executeRaw`DELETE FROM tests
-  WHERE name = '${TEST_NAME}'
-  AND "pdf_url" = '${PDF_URL}'
-  AND "category_id" = ${CATEGORY_ID}
-  AND "teacher_discipline_id" = ${TEACHER_DISCIPLINE_ID}`;
+  await prisma.$executeRaw`TRUNCATE TABLE tests;`;
 });
 
 describe('POST /tests', () => {
@@ -63,6 +59,11 @@ describe('POST /tests', () => {
       })
       .set('Authorization', 'bearer ' + TOKEN);
     expect(response.status).toBe(201);
+
+    const test = await prisma.test.findFirst({
+      where: { name: TEST_NAME },
+    });
+    expect(test).toBeDefined();
   });
 
   it('should return a 400 status code when test already exists', async () => {
@@ -93,7 +94,43 @@ describe('POST /tests', () => {
         categoryId: CATEGORY_ID,
         teacherDisciplineId: TEACHER_DISCIPLINE_ID,
       })
-      .set('Authorization', 'bearer ' + 'wrong token');
+      .set('Authorization', `bearer wrong${TOKEN}`);
+    expect(response.status).toBe(401);
+  });
+});
+
+describe('GET /tests/byterms', () => {
+  it('should return a 200 status code when get tests group by terms successfully', async () => {
+    const response = await supertest(app)
+      .get('/tests/byterms')
+      .set('Authorization', `bearer ${TOKEN}`);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toHaveLength(6);
+  });
+
+  it('should return a 401 status code when user has invalid token', async () => {
+    const response = await supertest(app)
+      .get('/tests/byterms')
+      .set('Authorization', `bearer wrong${TOKEN}`);
+    expect(response.status).toBe(401);
+  });
+});
+
+describe('GET /tests/byteachers', () => {
+  it('should return a 200 status code when get tests group by teachers successfully', async () => {
+    const response = await supertest(app)
+      .get('/tests/byteachers')
+      .set('Authorization', `bearer ${TOKEN}`);
+    expect(response.status).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+    expect(response.body).toHaveLength(2);
+  });
+
+  it('should return a 401 status code when user has invalid token', async () => {
+    const response = await supertest(app)
+      .get('/tests/byteachers')
+      .set('Authorization', `bearer wrong${TOKEN}`);
     expect(response.status).toBe(401);
   });
 });
